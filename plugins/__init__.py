@@ -1,9 +1,17 @@
+from _config import getvar
 from os import listdir
 from os.path import isfile, join  # basename, dirname
+import json
 
 plugins_dir = "plugins"  # or basename(dirname(__file__))
-# List of plugins to skip. __init__.py is always skipped.
-skip_plugins = ("__template", "file")
+
+try:
+  with open("plugins.json", "r") as f:
+    conf = json.load(f)
+except FileNotFoundError:
+  conf = dict()
+finally:
+  skip_plugins = getvar("ZPG_SKIP_PLUGINS", default=("template", ))
 
 # Get *.py files except tuple(skip_plugins), and remove the .py extension.
 modules = [f[:-3] for f in listdir(plugins_dir)
