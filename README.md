@@ -44,4 +44,4 @@ To omit any portion of the prefix, simply set the value to an empty string
 
 ## Query Strings
 The template and default profile allow setting the host name by query string. The item name must match the host_tag in the device profile  
-Example using the default profile: http://zabbix.example.com:8080/default?host=myhost1
+Example using the default profile: http://zabbix.example.com:8080/default?host=myhost
