@@ -3,6 +3,9 @@ Flask Edition
 
 _Get the PHP edition at https://github.com/Neon6105/zabbix-pushgateway-php_
 
+> [!IMPORTANT]  
+> This repository is currently being rewritten with massive amounts of breaking changes. The current code works, but will be unsupported in the future.
+
 ## Installation
 1. Clone this repo to a server that sits between your push devices and Zabbix (can colo with Zabbix on a different port)  
 1. Rename `example_config.py` to `_config.py`  
