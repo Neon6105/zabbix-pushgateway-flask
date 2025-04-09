@@ -5,8 +5,8 @@ _Get the PHP edition at https://github.com/Neon6105/zabbix-pushgateway-php_
   
 ## Installation
 1. Clone this repo to a server that sits between your push devices and Zabbix (can colo with Zabbix on a different port)  
-1. Rename `example_config.py` to `_config.py`  
-1. Edit `_config.py` to set the api_url and api_token for Zabbix
+1. Rename `example.config.py` to `config.py`  
+1. Edit `config.py` to set the api_url and api_token for Zabbix
 
 ## Virtual Environment
 TODO: Write documentation for virtual environments  
