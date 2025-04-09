@@ -17,7 +17,8 @@ blueprint = Blueprint(f"{plugin_name}", __name__)
 
 @blueprint.route(f"/{plugin_name}", methods=["POST", "GET"])
 def translate():
-  host = request.args.get(host_key)
+  host = request.args.get("host", None)
+  host = host if host else request.args.get(host_key, None)
   if request.method == "POST":
     zbx = Zabbix()
     query_string = request.query_string.decode("utf-8")
@@ -34,6 +35,5 @@ def translate():
     writecache(plugin_name, host, qs, None, json_out, result.json())
     return result.content
   # else it's a GET request
-  host = request.args.get("host")
   return readcache(plugin_name, host)
 # -- end translate()
