@@ -12,26 +12,26 @@ _Get the PHP edition at https://github.com/Neon6105/zabbix-pushgateway-php_
 TODO: Write documentation for virtual environments  
 
 ## Device Profiles
-1. For each device type, create a _deviceprofile_.py in `plugins`  
+1. For each device type, create a _deviceprofile_.py in `profiles`  
    It is recommended to copy the provided template rather than creating the profile manually  
 1. Modify the main section of the device profile to handle the incoming JSON file  
 `host_key` is the key from the pushed JSON that contains the technical host name in Zabbix  
 `key_prefix` is a string that will be prefixed to each JSON key before sending it to Zabbix  
-`skip_keys` is an iterable item of strings containing the JSON keys to ignore (will not be sent to Zabbix)  
+`skip_key` is an iterable item of strings containing the JSON keys to ignore (will not be sent to Zabbix)  
 
 ## Zabbix Setup
 1. Create a new host in Zabbix and set the host name to match the value provided by the host_tag key in the pushed JSON  
 1. Create an Item for the host for each additional JSON key and set the type to "Zabbix Trapper".  
-The item key must include the `ZABBIX_KEY_PREFIX` from `_config.py` and the `key_prefix` from the plugin, if set.  
+The item key must include the `KEY_PREFIX` from `config.py` and the `key_prefix` from the plugin, if set.  
 ```python
-< _config.py >
+< config.py >
 
-_vars = {...
-"ZABBIX_KEY_PREFIX": "pushed.",
+zabbix_vars = {...
+"KEY_PREFIX": "pushed.",
 ...}
 ```
 ```python
-< plugins/deviceprofile.py >
+< profiles/deviceprofile.py >
 
 ...
 key_prefix = "device."
@@ -43,5 +43,5 @@ To omit any portion of the prefix, simply set the value to an empty string
 1. Configure your device to push its JSON file to your_server_url/deviceprofile
 
 ## Query Strings
-The template and default profile allow setting the host name by query string. The item name must match the host_tag in the device profile  
-Example using the default profile: http://zabbix.example.com:8080/default?host=myhost
+The template allows setting the host name by query string. The item name must match the host_tag in the device profile  
+Example using the template profile: http://zabbix.example.com:8080/template?host=myhost
