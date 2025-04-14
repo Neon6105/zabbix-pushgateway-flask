@@ -13,14 +13,18 @@ plugin_name = basename(__file__)[:-3]
 host_key = "facID"
 plugin_prefix = f"{plugin_name}."  # set to "" for no prefix
 skip_key = ("when", )
+msg_data = ("srcInput", "srcName", "event", "orig", "stations")
+
 
 def epochtime(isotime):
-  if clock:
-    clock = datetime.fromisoformat(clock)
+  if isotime:
+    clock = datetime.fromisoformat(isotime)
     clock = calendar.timegm(clock.timetuple())
     clock = str(clock).split(".")[0]
   else:
     clock = str(time.time()).split(".")[0]
+  return clock
+
 
 # Flask Blueprint
 blueprint = Blueprint(f"{plugin_name}", __name__)
@@ -39,11 +43,25 @@ def translate():
       return zbx.no_host(host_key, json_in)
     # Convert the incoming ISO 8601 string into epoch time (seconds)
     clock = json_in.get("when", None)
+    clock = epochtime(clock)
     for _key, _val in json_in.items():
-      # TODO: handle 'msg' key
       if _key in skip_key:
         continue
+      if _key == "msg":
+        _key = f"msg{json_in['msgType']}"
       zbx.add_param(host, plugin_prefix, _key, str(_val), clock)
+    # Special case: Alert Sent (msgType == 4)
+    if (json_in["msgType"] == 4):
+      event = json_in["event"]
+      time_logged = epochtime(json_in["timeLogged"])
+      for _key, _val in json_in["msg"].items():
+        if (_key not in msg_data):
+          continue
+        if _key == "event":
+          _key = _val
+          _val = time_logged
+        zbx.add_param(host, f"{event}{plugin_prefix}", _key, str(_val), time_logged)
+    # -- end msgType == 4
     json_out, result = zbx.push()
     qs = request.query_string.decode("utf-8")
     writecache(plugin_name, host, qs, json_in, json_out, result.json())
