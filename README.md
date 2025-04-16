@@ -1,7 +1,7 @@
 # Zabbix Pushgateway
 Flask Edition
 
-_Get the Go edition at https://github.com/Jonny-Burkholder/go-zabbix_
+_Get the Go edition at https://github.com/Jonny-Burkholder/go-zabbix_  
 _Get the PHP edition at https://github.com/Neon6105/zabbix-pushgateway-php_
   
 ## Installation
